@@ -13,7 +13,7 @@ type ModalCorrectProps = {
   length: number;
   setOpacity: (boolean: boolean) => void;
   audioSrc: string;
-  username?: string;
+  username?: string | null;
   topicId: number;
   progress: number;
 };

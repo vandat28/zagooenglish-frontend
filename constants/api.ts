@@ -1,4 +1,4 @@
-const API_DOMAIN = "http://localhost:8080"
+export const API_DOMAIN = "http://localhost:8080"
 
 export const API_LEVEL = `${API_DOMAIN}/api/level`
 export const API_TOPIC = `${API_DOMAIN}/api/topic`

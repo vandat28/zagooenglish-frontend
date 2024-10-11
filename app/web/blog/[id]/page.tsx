@@ -8,5 +8,6 @@ export const metadata: Metadata = {
 
 export default function Page({ params }: { params: { id: number } }) {
   const { id } = params;
+
   return <BlogDetail id={id} />;
 }

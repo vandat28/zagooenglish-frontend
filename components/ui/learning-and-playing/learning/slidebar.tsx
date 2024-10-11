@@ -7,7 +7,7 @@ import { usePathname } from "next/navigation";
 import { fetcher } from "@/api/fetcher";
 import useSWR from "swr";
 import CircleLoading from "@/components/ui/loading/circle-loading";
-import { API_TOPIC_LIST } from "@/constants/api";
+import { API_DOMAIN, API_TOPIC_LIST } from "@/constants/api";
 import { CircularProgressWithLabel } from "@/components/ui/process-bar";
 
 type SidebarProps = {
@@ -54,7 +54,7 @@ const Sidebar = (props: SidebarProps) => {
                       <Link href={`/web/learning/${props.slug}/${topic.id}`}>
                         <Avatar
                           className="w-16 h-16"
-                          src={`https://dinoenglish.app/_next/image?url=%2Fassets%2Fmedia%2Ftopic%2Fimage%2F${topic.img}.png&w=1920&q=75`}
+                          src={`${API_DOMAIN}/uploads/${topic.img}`}
                         />
                       </Link>
                     </IconButton>

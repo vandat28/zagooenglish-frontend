@@ -6,6 +6,7 @@ import CardMedia from "@mui/material/CardMedia";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import Link from "next/link";
+import { API_DOMAIN } from "@/constants/api";
 
 type BlogProps = {
   blog: Blog;
@@ -16,8 +17,7 @@ export default function BlogCard({ blog }: BlogProps) {
     <Card className="transform transition-transform duration-300 hover:-translate-y-2 mb-6  rounded-2xl md:w-[45%] lg:w-[30%]">
       <CardMedia
         sx={{ height: 180 }}
-        image={`http://localhost:8080/uploads/${blog.img}`}
-        title="green iguana"
+        image={`${API_DOMAIN}/uploads/${blog.img}`}
       />
       <CardContent>
         <Typography

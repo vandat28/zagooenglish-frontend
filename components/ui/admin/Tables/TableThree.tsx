@@ -10,7 +10,7 @@ import NativeSelect from "@mui/material/NativeSelect";
 import AddTopicDialog from "@/components/ui/admin/Dialog/Topic/addTopic";
 import useSWR from "swr";
 import { fetcher } from "@/api/fetcher";
-import { API_TOPIC } from "@/constants/api";
+import { API_DOMAIN, API_TOPIC } from "@/constants/api";
 import QuestionsManagementDialog from "@/components/ui/admin/Dialog/questions";
 
 function removeAccents(str: string) {
@@ -156,7 +156,7 @@ const TableThree = () => {
                   </td>
                   <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
                     <img
-                      src={`http://localhost:8080/uploads/${topic.img}`}
+                      src={`${API_DOMAIN}/uploads/${topic.img}`}
                       className="w-14 rounded-full" // Thêm h-20 để đảm bảo chiều cao bằng chiều rộng
                     />
                   </td>

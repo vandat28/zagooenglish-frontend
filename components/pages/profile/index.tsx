@@ -1,6 +1,6 @@
 "use client";
 import { CircularProgressWithLabel } from "@/components/ui/process-bar";
-import { API_PROCESS } from "@/constants/api";
+import { API_DOMAIN, API_PROCESS } from "@/constants/api";
 import { useUser } from "@/context/user";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
@@ -63,7 +63,7 @@ const UserProfile = () => {
                 >
                   <CircularProgressWithLabel value={element.progress} size={64}>
                     <img
-                      src={`http://localhost:8080/uploads/${element.img}`}
+                      src={`${API_DOMAIN}/uploads/${element.img}`}
                       className="w-14"
                     />
                   </CircularProgressWithLabel>

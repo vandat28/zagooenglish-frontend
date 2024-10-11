@@ -307,6 +307,7 @@ const TextEditor: React.FC = () => {
             <h1 className="mb-4 text-3xl font-extrabold leading-tight text-gray-900 lg:mb-6 lg:text-4xl dark:text-white">
               {blog.title}
             </h1>
+            <img src={blog.avatarTesting} alt="" className="w-full mb-6" />
             <p className="mb-6">{blog.description}</p>
             <div dangerouslySetInnerHTML={{ __html: blog.htmlContent }} />
           </div>

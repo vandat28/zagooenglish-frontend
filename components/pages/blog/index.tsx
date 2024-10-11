@@ -6,8 +6,17 @@ import { API_BLOG_LIST } from "@/constants/api";
 import { Button } from "@mui/material";
 import Link from "next/link";
 import useSWR from "swr";
+import Cookies from "js-cookie";
+import { useEffect, useState } from "react";
 
 export default function Blog() {
+  const [cookieValue, setCookieValue] = useState<string | undefined>("");
+  useEffect(() => {
+    // Lấy giá trị của cookie có tên là 'myCookie'
+    const myCookie = Cookies.get("user");
+    setCookieValue(myCookie);
+  }, [cookieValue]);
+
   const { data, error, isLoading } = useSWR<Blog[]>(
     `${API_BLOG_LIST}`,
     fetcher
@@ -17,15 +26,18 @@ export default function Blog() {
 
   return (
     <>
-      <Link href={`/web/blog/create`} className="md:px-20">
-        <Button
-          size="medium"
-          className="hover:bg-gray-200 text-sx"
-          variant="outlined"
-        >
-          Viết Blog
-        </Button>
-      </Link>
+      {cookieValue && (
+        <Link href={`/web/blog/create`} className="md:px-20">
+          <Button
+            size="medium"
+            className="hover:bg-gray-200 text-sx"
+            variant="outlined"
+          >
+            Viết Blog
+          </Button>
+        </Link>
+      )}
+
       <div className="flex flex-col md:px-20">
         {isLoading && <CircleLoading />}
 

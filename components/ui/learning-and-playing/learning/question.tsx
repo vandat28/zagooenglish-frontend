@@ -11,7 +11,7 @@ type QuestionProps = {
   setIndex: (index: number) => void;
   index: number;
   length: number;
-  username?: string;
+  username?: string | null;
   topicId: number;
   progress: number;
 };
