@@ -11,7 +11,7 @@ const UserProfile = () => {
 
   useEffect(() => {
     getData(user?.username);
-  }, []);
+  }, [user]);
 
   const getData = async (cookieUser: any) => {
     try {
@@ -19,6 +19,7 @@ const UserProfile = () => {
       if (response.data) {
         setData(response.data);
         console.log(response.data);
+        console.log("name", cookieUser);
       }
     } catch (error) {
       console.error("There was an error!", error);

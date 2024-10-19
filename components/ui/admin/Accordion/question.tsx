@@ -8,6 +8,7 @@ import MuiAccordionSummary, {
 import MuiAccordionDetails from "@mui/material/AccordionDetails";
 import Typography from "@mui/material/Typography";
 import { Tooltip } from "@mui/material";
+import { UPLOAD_DOMAIN } from "@/constants/api";
 
 const Accordion = styled((props: AccordionProps) => (
   <MuiAccordion disableGutters elevation={0} square {...props} />
@@ -77,7 +78,10 @@ export default function QuestionAccordion(props: QuestionAccordionProps) {
                 <div className="flex gap-3">
                   <div className="flex items-center">Câu {i + 1}:</div>
                   <audio controls>
-                    <source src={item.title} type="audio/mpeg" />
+                    <source
+                      src={`${UPLOAD_DOMAIN}/${item.title}`}
+                      type="audio/mpeg"
+                    />
                     Your browser does not support the audio element.
                   </audio>
                 </div>
@@ -132,11 +136,11 @@ export default function QuestionAccordion(props: QuestionAccordionProps) {
                         : "border-red"
                     }`}
                   >
-                    {/* <img
-                      src={`/images/${item.img}.png`}
+                    <img
+                      src={`${UPLOAD_DOMAIN}/${item.img}`}
                       alt={item.answer}
                       className="w-20 h-20 mb-2"
-                    /> */}
+                    />
                     <p className="text-lg font-semibold">{item.answer}</p>
                   </div>
                 ))}

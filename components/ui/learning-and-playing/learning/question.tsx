@@ -5,6 +5,7 @@ import DefaultQuestion from "./default-question";
 import ABCDQuestion from "./ABCD-question";
 import SpeechToTextPage from "./speaking-question";
 import WritingQuestion from "./writing-question";
+import { UPLOAD_DOMAIN } from "@/constants/api";
 
 type QuestionProps = {
   question: Question;
@@ -37,7 +38,8 @@ export default function Question(props: QuestionProps) {
     // Tạo một bản sao của mảng check
     const newCheck = [...check];
     if (audioSrc) {
-      const audio = new Audio(audioSrc);
+      console.log(audioSrc);
+      const audio = new Audio(`${UPLOAD_DOMAIN}/${audioSrc}`);
       audio.play();
       setMainAudioSrc(audioSrc);
     }

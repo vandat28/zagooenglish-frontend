@@ -17,6 +17,7 @@ import QuestionAccordion from "@/components/ui/admin/Accordion/question";
 import { fetcher } from "@/api/fetcher";
 import useSWR from "swr";
 import { API_QUESTIONS_OF_TOPIC } from "@/constants/api";
+import AddQuestions from "@/components/ui/admin/Dialog/addQuestions";
 
 const Transition = React.forwardRef(function Transition(
   props: TransitionProps & {
@@ -36,10 +37,15 @@ type QuestionsManagementDialogProps = {
 export default function QuestionsManagementDialog(
   props: QuestionsManagementDialogProps
 ) {
-  const { data, error, isLoading } = useSWR<GetQuestionsOfTopicResponse>(
-    `${API_QUESTIONS_OF_TOPIC}/${props.topicId}`,
-    fetcher
-  );
+  const { data, error, isLoading, mutate } =
+    useSWR<GetQuestionsOfTopicResponse>(
+      `${API_QUESTIONS_OF_TOPIC}/${props.topicId}`,
+      fetcher
+    );
+
+  const resetData = () => {
+    mutate();
+  };
 
   return (
     <React.Fragment>
@@ -76,9 +82,12 @@ export default function QuestionsManagementDialog(
             </Button>
           </Toolbar>
         </AppBar>
-        <Box sx={{ display: "flex", p: 6 }}>
-          <div className="w-1/2 ">Thêm câu hỏi</div>
-          <div className="w-1/2 space-y-2">
+        <Box sx={{ display: "flex", p: 6, gap: "4%" }}>
+          <div className="w-[48%] ">
+            <AddQuestions topicId={data?.topic?.id} resetData={resetData} />
+          </div>
+
+          <div className="w-[48%] space-y-2">
             <QuestionAccordion questions={data?.questions || []} />
           </div>
         </Box>

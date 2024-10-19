@@ -1,4 +1,5 @@
 "use client";
+import { UPLOAD_DOMAIN } from "@/constants/api";
 import React, { useEffect, useState } from "react";
 
 type WritingQuestionProps = {
@@ -29,9 +30,14 @@ const WritingQuestion = (props: WritingQuestionProps) => {
     }
   }, [text]);
 
-  const handleClick = (answer: string, isTrue: number, index: number) => {
+  const handleClick = (
+    answer: string,
+    isTrue: number,
+    index: number,
+    audioSrc: string
+  ) => {
     if (isTrue === 1 && answer === trueAnswer[trueAnswerIndex]) {
-      const audio = new Audio("/audio/true.mp3");
+      const audio = new Audio(`${UPLOAD_DOMAIN}/${audioSrc}`);
       audio.play();
       setText([...text, answer]);
       setIsClicked([...isClicked, index]);
@@ -90,7 +96,9 @@ const WritingQuestion = (props: WritingQuestionProps) => {
               <>
                 <button
                   key={index}
-                  onClick={() => handleClick(item.answer, item.isTrue, index)}
+                  onClick={() =>
+                    handleClick(item.answer, item.isTrue, index, item.audioSrc)
+                  }
                   className={`bg-white border-2 border-black p-2 rounded-md shadow-lg hover:bg-gray-3 hover:shadow-xl
                   ${isFalse[index] ? "shake border-red" : ""}`}
                 >

@@ -27,7 +27,7 @@ export default function AddTopicDialog(props: AddTopicDialogProps) {
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const formData = new FormData(event.currentTarget); // Tạo FormData để chứa dữ liệu
-
+    console.log(formData);
     try {
       // Gửi yêu cầu POST tới API bằng axios
       const response = await axios.post(`${API_TOPIC}`, formData, {

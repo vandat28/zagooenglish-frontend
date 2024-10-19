@@ -1,3 +1,5 @@
+import { UPLOAD_DOMAIN } from "@/constants/api";
+
 type DefaultQuestionProps = {
   question: Question;
   handleCheckAnswer: (isTrue: number, index: number, audioSrc: string) => void;
@@ -33,7 +35,7 @@ export default function DefaultQuestion(props: DefaultQuestionProps) {
             >
               <img
                 className="w-28 md:w-36"
-                src={`https://dinoenglish.app/_next/image?url=%2Fassets%2Fmedia%2Fgreeting%2Fimage%2F${item.img}.png&w=1920&q=75`}
+                src={`${UPLOAD_DOMAIN}/${item.img}`}
               />
             </div>
 

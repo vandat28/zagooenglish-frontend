@@ -1,4 +1,5 @@
 "use client";
+import { UPLOAD_DOMAIN } from "@/constants/api";
 import VolumeUpIcon from "@mui/icons-material/VolumeUp";
 import { useState } from "react";
 
@@ -17,7 +18,7 @@ export default function ABCDQuestion(props: ABCDQuestionProps) {
       setIsPlaying(false);
     } else {
       setIsPlaying(true);
-      const audio = new Audio(audioSrc);
+      const audio = new Audio(`${UPLOAD_DOMAIN}/${audioSrc}`);
       audio.play();
       audio.addEventListener("ended", handleAudioEnded);
     }
