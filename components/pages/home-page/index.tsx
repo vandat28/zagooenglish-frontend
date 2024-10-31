@@ -60,7 +60,7 @@ export default function HomePage() {
       </div>
       <Intro />
       <Experience />
-      <Reviews />
+      {/* <Reviews /> */}
     </>
   );
 }

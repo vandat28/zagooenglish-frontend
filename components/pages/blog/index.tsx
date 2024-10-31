@@ -21,7 +21,7 @@ export default function Blog() {
     `${API_BLOG_LIST}`,
     fetcher
   );
-
+  const blogs = data?.filter((blog) => blog.status === 1);
   if (error) return <div>error</div>;
 
   return (
@@ -42,8 +42,8 @@ export default function Blog() {
         {isLoading && <CircleLoading />}
 
         <div className="flex flex-col items-center md:flex-row md:gap-[10%] lg:gap-[5%] md:flex-wrap mt-8">
-          {data &&
-            data.map((blog: Blog, index: number) => (
+          {blogs &&
+            blogs.map((blog: Blog, index: number) => (
               <BlogCard key={index} blog={blog} />
             ))}
         </div>

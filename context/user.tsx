@@ -15,6 +15,7 @@ import Cookies from "js-cookie";
 interface UserContextType {
   user: User | null;
   loading: boolean;
+  refreshUser: () => void;
 }
 
 // Tạo context với giá trị mặc định
@@ -36,30 +37,37 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
 
-  // Thay thế bằng URL API của bạn
-
-  useEffect(() => {
+  const fetchUser = async () => {
     const username = Cookies.get("user");
     if (username) {
-      axios
-        .get(`${API_USER}/${JSON.parse(username)}`) // Thay thế `me` bằng endpoint của bạn
-        .then((response) => {
-          setUser(response.data);
-        })
-        .catch((error) => {
-          console.error("Error fetching user:", error);
-        })
-        .finally(() => {
-          setLoading(false);
-        });
+      setLoading(true);
+      try {
+        const response = await axios.get(`${API_USER}/${JSON.parse(username)}`);
+        setUser(response.data);
+      } catch (error) {
+        console.error("Error fetching user:", error);
+        setUser(defaultUser);
+      } finally {
+        setLoading(false);
+      }
     } else {
       setUser(defaultUser);
+      setLoading(false);
     }
-    // Lấy thông tin người dùng từ API
+  };
+
+  // Lấy thông tin người dùng từ API khi component mount
+  useEffect(() => {
+    fetchUser();
   }, []);
 
+  // Hàm để gọi lại API và cập nhật thông tin người dùng
+  const refreshUser = () => {
+    fetchUser();
+  };
+
   return (
-    <UserContext.Provider value={{ user, loading }}>
+    <UserContext.Provider value={{ user, loading, refreshUser }}>
       {children}
     </UserContext.Provider>
   );

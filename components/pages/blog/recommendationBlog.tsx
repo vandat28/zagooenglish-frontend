@@ -10,14 +10,16 @@ export default function RecommendationBlog() {
     `${API_BLOG_LIST}`,
     fetcher
   );
+
+  const blogs = data?.filter((blog) => blog.status === 1);
   return (
     <div className="w-full xl:w-[28%] ">
       <h3 className="text-lg font-bold border-l-4 pl-2 border-blue-500 mb-4">
         Các bài viết khác
       </h3>
       <ul className="space-y-4">
-        {data &&
-          data.slice(0, 6).map((blog) => (
+        {blogs &&
+          blogs.slice(0, 6).map((blog) => (
             <li key={blog.id} className="flex items-center space-x-4">
               <img
                 src={`${API_DOMAIN}/uploads/${blog.img}`}

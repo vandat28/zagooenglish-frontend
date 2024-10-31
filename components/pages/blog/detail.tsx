@@ -1,9 +1,11 @@
 "use client";
 import { fetcher } from "@/api/fetcher";
 import RecommendationBlog from "@/components/pages/blog/recommendationBlog";
+import NotFound from "@/components/pages/notFound";
 import CircleLoading from "@/components/ui/loading/circle-loading";
 import { API_BLOG, API_DOMAIN } from "@/constants/api";
 import Link from "next/link";
+import { redirect } from "next/navigation";
 import React from "react";
 import useSWR from "swr";
 
@@ -12,6 +14,8 @@ type BlogDetailProps = {
 };
 export default function BlogDetail({ id }: BlogDetailProps) {
   const { data, error, isLoading } = useSWR<Blog>(`${API_BLOG}/${id}`, fetcher);
+
+  if (data?.status !== 1) return <NotFound />;
 
   if (error) return <div>error</div>;
 
@@ -31,9 +35,9 @@ export default function BlogDetail({ id }: BlogDetailProps) {
               alt=""
               className="w-full mb-6"
             />
-            <p className="mb-6">{data.description}</p>
+            <p className="mb-6 font-medium">{data.description}</p>
             <div
-              className="mt-6"
+              className="mt-6 font-normal"
               dangerouslySetInnerHTML={{ __html: data.content }}
             ></div>
           </article>

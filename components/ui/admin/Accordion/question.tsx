@@ -130,11 +130,20 @@ export default function QuestionAccordion(props: QuestionAccordionProps) {
                 {item.answers.map((item) => (
                   <div
                     key={item.id}
-                    className={`flex flex-col items-center justify-center p-4 border rounded-lg shadow-sm ${
+                    title="Bấm để nghe âm thanh"
+                    className={`flex flex-col cursor-pointer items-center justify-center p-4 border rounded-lg shadow-sm ${
                       item.isTrue
                         ? "border-green-500 bg-green-100"
                         : "border-red"
                     }`}
+                    onClick={() => {
+                      if (item.audioSrc) {
+                        const audio = new Audio(
+                          `${UPLOAD_DOMAIN}/${item.audioSrc}`
+                        );
+                        audio.play();
+                      }
+                    }}
                   >
                     <img
                       src={`${UPLOAD_DOMAIN}/${item.img}`}
@@ -167,6 +176,15 @@ export default function QuestionAccordion(props: QuestionAccordionProps) {
                           ? "border-green-500 bg-green-100"
                           : "border-red"
                       }`}
+                      title="Bấm để nghe âm thanh"
+                      onClick={() => {
+                        if (item.audioSrc) {
+                          const audio = new Audio(
+                            `${UPLOAD_DOMAIN}/${item.audioSrc}`
+                          );
+                          audio.play();
+                        }
+                      }}
                     >
                       {item.answer}
                     </button>

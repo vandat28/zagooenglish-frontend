@@ -9,6 +9,9 @@ type LevelProps = {
 };
 
 export default function Level(props: LevelProps) {
+  const topics = props.topics.filter((topic: Topic) => {
+    return topic.active == 1;
+  });
   return (
     <>
       <div
@@ -21,7 +24,7 @@ export default function Level(props: LevelProps) {
           <img src={props.img} alt="" className="w-8 md:w-16" />
         </div>
         <div className="mt-8 flex flex-col justify-center items-center md:px-10 md:flex-row md:gap-[10%] lg:gap-[5%] md:flex-wrap">
-          {props.topics.map((topic: Topic, index: number) => (
+          {topics.map((topic: Topic, index: number) => (
             <Topic
               key={index}
               color={props.color}

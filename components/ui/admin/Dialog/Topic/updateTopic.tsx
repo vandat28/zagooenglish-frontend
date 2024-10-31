@@ -9,59 +9,65 @@ import { FormControl, InputLabel, MenuItem, Select } from "@mui/material";
 import axios from "axios"; // Import axios
 import { API_TOPIC, UPLOAD_DOMAIN } from "@/constants/api";
 import ToastNotification, {
+  notifyError,
   notifySuccess,
 } from "@/components/ui/toast-notification";
 
-type AddTopicDialogProps = {
+type UpdateTopicDialogProps = {
   open: boolean;
   handleClose: () => void;
-  onSubmitSuccess: () => void; // Callback để cập nhật dữ liệu sau khi submit
+  onSubmitSuccess: () => void; // Callback to refresh data after update
+  topicData: any;
 };
 
-export default function AddTopicDialog(props: AddTopicDialogProps) {
-  const formRef = React.useRef<HTMLFormElement>(null); // Tạo tham chiếu đến form
-  const [imagePreview, setImagePreview] = React.useState<string | null>(null); // State để lưu URL hình ảnh
+export default function UpdateTopicDialog(props: UpdateTopicDialogProps) {
+  const formRef = React.useRef<HTMLFormElement>(null);
+  const [imagePreview, setImagePreview] = React.useState<string | null>(null);
 
   const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files[0]) {
       const file = event.target.files[0];
       const reader = new FileReader();
       reader.onloadend = () => {
-        setImagePreview(reader.result as string); // Cập nhật state với URL hình ảnh
+        setImagePreview(reader.result as string);
       };
-      reader.readAsDataURL(file); // Đọc file ảnh
+      reader.readAsDataURL(file);
     }
   };
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const formData = new FormData(event.currentTarget); // Tạo FormData để chứa dữ liệu
-    console.log(formData);
+    const formData = new FormData(event.currentTarget);
     try {
-      // Gửi yêu cầu POST tới API bằng axios
-      const response = await axios.post(`${API_TOPIC}`, formData, {
-        headers: {
-          "Content-Type": "multipart/form-data", // Đặt Content-Type là multipart/form-data
-        },
-      });
+      const response = await axios.put(
+        `${API_TOPIC}/${props.topicData.id}`, // API call for updating topic
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
 
-      console.log("Topic added successfully:", response.data);
-      props.onSubmitSuccess(); // Gọi hàm refreshTopics từ props để tải lại danh sách
-      notifySuccess("Thêm mới thành công");
-      // Reset form sau khi thêm thành công
+      console.log("Topic updated successfully:", response.data);
+      props.onSubmitSuccess();
+      props.handleClose();
+      notifySuccess("Cập nhật thành công");
       if (formRef.current) {
-        formRef.current.reset(); // Gọi reset() trên formRef
-        setImagePreview(null); // Reset preview hình ảnh
+        formRef.current.reset();
+        setImagePreview(null);
       }
     } catch (error) {
+      notifyError("Cập nhật thất bại xin thử lại");
       if (axios.isAxiosError(error)) {
-        console.error("Failed to add topic:", error.response?.data);
+        console.error("Failed to update topic:", error.response?.data);
       } else {
-        console.error("Error occurred while adding topic:", error);
+        console.error("Error occurred while updating topic:", error);
       }
     }
   };
 
+  console.log(props.topicData);
   return (
     <React.Fragment>
       <Dialog
@@ -69,11 +75,11 @@ export default function AddTopicDialog(props: AddTopicDialogProps) {
         onClose={props.handleClose}
         PaperProps={{
           component: "form",
-          ref: formRef, // Gán ref cho form
+          ref: formRef,
           onSubmit: handleSubmit,
         }}
       >
-        <DialogTitle sx={{ textAlign: "center" }}>Thêm chủ đề</DialogTitle>
+        <DialogTitle sx={{ textAlign: "center" }}>Cập nhật chủ đề</DialogTitle>
         <DialogContent>
           <TextField
             autoFocus
@@ -84,6 +90,7 @@ export default function AddTopicDialog(props: AddTopicDialogProps) {
             type="text"
             fullWidth
             variant="standard"
+            defaultValue={props.topicData.name} // Pre-fill data
           />
           <TextField
             required
@@ -93,28 +100,24 @@ export default function AddTopicDialog(props: AddTopicDialogProps) {
             type="text"
             fullWidth
             variant="standard"
+            defaultValue={props.topicData.label} // Pre-fill data
           />
           <div className="flex justify-start items-center gap-4 my-4">
             <span>Hình ảnh:</span>
             <input
-              required
               name="avatar"
               type="file"
-              accept="image/*" // chỉ chấp nhận file ảnh
-              onChange={handleImageChange} // Thêm sự kiện thay đổi
-              // Thêm khoảng cách giữa các input
+              accept="image/*"
+              onChange={handleImageChange}
             />
           </div>
           <div className="flex justify-center items-center">
-            {imagePreview && ( // Hiển thị hình ảnh nếu có
-              <img
-                src={imagePreview}
-                alt="Preview"
-                className="max-h-20" // Căn chỉnh và thêm khoảng cách
-              />
-            )}
+            <img
+              src={imagePreview || `${UPLOAD_DOMAIN}/${props.topicData.img}`}
+              alt="Preview"
+              className="max-h-20"
+            />
           </div>
-
           <FormControl variant="filled" sx={{ width: "100%", mt: 3 }}>
             <InputLabel id="demo-simple-select-filled-label">Cấp độ</InputLabel>
             <Select
@@ -123,6 +126,7 @@ export default function AddTopicDialog(props: AddTopicDialogProps) {
               id="demo-simple-select-filled"
               name="level"
               fullWidth
+              defaultValue={props.topicData.levelId} // Pre-fill data
             >
               <MenuItem value="1">Sơ cấp</MenuItem>
               <MenuItem value="2">Trung cấp</MenuItem>
@@ -132,7 +136,7 @@ export default function AddTopicDialog(props: AddTopicDialogProps) {
         </DialogContent>
         <DialogActions>
           <Button onClick={props.handleClose}>Hủy</Button>
-          <Button type="submit">Lưu</Button>
+          <Button type="submit">Cập nhật</Button>
         </DialogActions>
       </Dialog>
     </React.Fragment>

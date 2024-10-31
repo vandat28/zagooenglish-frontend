@@ -57,14 +57,6 @@ export default function QuestionsManagementDialog(
       >
         <AppBar sx={{ position: "relative" }}>
           <Toolbar>
-            <IconButton
-              edge="start"
-              color="inherit"
-              onClick={props.onClose}
-              aria-label="close"
-            >
-              <CloseIcon />
-            </IconButton>
             <Typography
               sx={{
                 ml: 2,
@@ -77,15 +69,22 @@ export default function QuestionsManagementDialog(
             >
               Quản lý chủ đề: {data?.topic?.name}
             </Typography>
-            <Button autoFocus color="inherit" onClick={props.onClose}>
-              Lưu
-            </Button>
+            <IconButton
+              edge="start"
+              color="inherit"
+              onClick={props.onClose}
+              aria-label="close"
+            >
+              <CloseIcon />
+            </IconButton>
           </Toolbar>
         </AppBar>
         <Box sx={{ display: "flex", p: 6, gap: "4%" }}>
-          <div className="w-[48%] ">
-            <AddQuestions topicId={data?.topic?.id} resetData={resetData} />
-          </div>
+          {data?.topic?.active !== 1 && (
+            <div className="w-[48%] ">
+              <AddQuestions topicId={data?.topic?.id} resetData={resetData} />
+            </div>
+          )}
 
           <div className="w-[48%] space-y-2">
             <QuestionAccordion questions={data?.questions || []} />

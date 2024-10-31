@@ -90,10 +90,6 @@ const options: ApexOptions = {
   xaxis: {
     type: "category",
     categories: [
-      "Sep",
-      "Oct",
-      "Nov",
-      "Dec",
       "Jan",
       "Feb",
       "Mar",
@@ -102,6 +98,10 @@ const options: ApexOptions = {
       "Jun",
       "Jul",
       "Aug",
+      "Sep",
+      "Oct",
+      "Nov",
+      "Dec",
     ],
     axisBorder: {
       show: false,
@@ -117,7 +117,7 @@ const options: ApexOptions = {
       },
     },
     min: 0,
-    max: 100,
+    max: 10000,
   },
 };
 
@@ -130,16 +130,16 @@ interface ChartOneState {
 
 const ChartOne: React.FC = () => {
   const series = [
-      {
-        name: "Product One",
-        data: [23, 11, 22, 27, 13, 22, 37, 21, 44, 22, 30, 45],
-      },
+    {
+      name: "Tổng truy cập",
+      data: [1000, 1100, 2200, 2700, 1300, 2200, 3700, 2100, 4400, 2200, 0, 0],
+    },
 
-      {
-        name: "Product Two",
-        data: [30, 25, 36, 30, 45, 35, 64, 52, 59, 36, 39, 51],
-      },
-    ]
+    // {
+    //   name: "Product Two",
+    //   data: [30, 25, 36, 30, 45, 35, 64, 52, 59, 36, 39, 51],
+    // },
+  ];
 
   return (
     <div className="col-span-12 rounded-sm border border-stroke bg-white px-5 pb-5 pt-7.5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:col-span-8">
@@ -150,11 +150,13 @@ const ChartOne: React.FC = () => {
               <span className="block h-2.5 w-full max-w-2.5 rounded-full bg-primary"></span>
             </span>
             <div className="w-full">
-              <p className="font-semibold text-primary">Total Revenue</p>
-              <p className="text-sm font-medium">12.04.2022 - 12.05.2022</p>
+              <p className="font-semibold text-primary">
+                Biểu đồ lượt truy cập
+              </p>
+              <p className="text-sm font-medium">01.01.2024 - 31.12.2024</p>
             </div>
           </div>
-          <div className="flex min-w-47.5">
+          {/* <div className="flex min-w-47.5">
             <span className="mr-2 mt-1 flex h-4 w-full max-w-4 items-center justify-center rounded-full border border-secondary">
               <span className="block h-2.5 w-full max-w-2.5 rounded-full bg-secondary"></span>
             </span>
@@ -162,9 +164,9 @@ const ChartOne: React.FC = () => {
               <p className="font-semibold text-secondary">Total Sales</p>
               <p className="text-sm font-medium">12.04.2022 - 12.05.2022</p>
             </div>
-          </div>
+          </div> */}
         </div>
-        <div className="flex w-full max-w-45 justify-end">
+        {/* <div className="flex w-full max-w-45 justify-end">
           <div className="inline-flex items-center rounded-md bg-whiter p-1.5 dark:bg-meta-4">
             <button className="rounded bg-white px-3 py-1 text-xs font-medium text-black shadow-card hover:bg-white hover:shadow-card dark:bg-boxdark dark:text-white dark:hover:bg-boxdark">
               Day
@@ -176,7 +178,7 @@ const ChartOne: React.FC = () => {
               Month
             </button>
           </div>
-        </div>
+        </div> */}
       </div>
 
       <div>

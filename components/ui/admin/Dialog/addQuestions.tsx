@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 import {
   Tabs,
@@ -46,6 +46,17 @@ const AddQuestionTabs = (props: AddQuestionTabsProps) => {
   >([{ answer: "", correct: false, audio: null }]);
 
   const [keyword, setKeyword] = useState<string>(""); // Input cho từ khóa keyword
+
+  useEffect(() => {
+    setQuestionText("");
+    setAnswers([
+      { text: "", audio: null, image: null },
+      { text: "", audio: null, image: null },
+      { text: "", audio: null, image: null },
+      { text: "", audio: null, image: null },
+    ]);
+    setKeyword("");
+  }, [activeTab]);
 
   const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
     setActiveTab(newValue);
@@ -241,6 +252,10 @@ const AddQuestionTabs = (props: AddQuestionTabsProps) => {
         );
         return;
       }
+      if (validWritingAnswers.some((answer) => !answer.audio)) {
+        alert("Phải nhập file âm thanh cho đáp án trong phần Writing.");
+        return;
+      }
 
       validWritingAnswers.forEach((writingAnswer, index) => {
         formData.append(`answers[${index}][text]`, writingAnswer.answer);
@@ -378,7 +393,7 @@ const AddQuestionTabs = (props: AddQuestionTabsProps) => {
             onChange={(e) => setQuestionText(e.target.value)}
           />
           <TextField
-            label="Từ khóa"
+            label="Đáp án đúng"
             fullWidth
             margin="normal"
             value={keyword}
@@ -400,7 +415,7 @@ const AddQuestionTabs = (props: AddQuestionTabsProps) => {
           />
           <div className="mt-4">
             {answers.map((answer, index) => (
-              <div key={index} className="mb-4">
+              <div key={index} className="space-y-4 mb-4">
                 <div className="flex items-center">
                   <Radio
                     checked={correctAnswer === index}
@@ -414,35 +429,57 @@ const AddQuestionTabs = (props: AddQuestionTabsProps) => {
                     margin="normal"
                   />
                 </div>
-                <div className="flex gap-4">
-                  <div>
-                    <label>Audio:</label>
-                    <input
-                      type="file"
-                      accept="audio/*"
-                      onChange={(e) =>
-                        handleFileChange(
-                          index,
-                          "audio",
-                          e.target.files?.[0] || null
-                        )
-                      }
+                <div className="flex justify-start items-center gap-4">
+                  <label>Âm thanh:</label>
+                  <input
+                    type="file"
+                    accept="audio/*"
+                    onChange={(e) =>
+                      handleFileChange(
+                        index,
+                        "audio",
+                        e.target.files?.[0] || null
+                      )
+                    }
+                  />
+
+                  {/* Nghe trước âm thanh nếu đã tải lên */}
+                  {answer.audio && (
+                    <IconButton
+                      onClick={() => {
+                        const audioSrc = URL.createObjectURL(
+                          answer.audio as Blob
+                        );
+                        const audio = new Audio(audioSrc);
+                        audio.play();
+                      }}
+                      aria-label="play audio"
+                    >
+                      <VolumeUpIcon />
+                    </IconButton>
+                  )}
+                </div>
+                <div className="flex justify-start items-center gap-4">
+                  <label>Hình ảnh:</label>
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={(e) =>
+                      handleFileChange(
+                        index,
+                        "image",
+                        e.target.files?.[0] || null
+                      )
+                    }
+                  />
+                  {/* Xem trước hình ảnh nếu đã tải lên */}
+                  {answer.image && (
+                    <img
+                      src={URL.createObjectURL(answer.image)}
+                      alt={`Đáp án ${index + 1}`}
+                      className="mt-2 max-h-14"
                     />
-                  </div>
-                  <div>
-                    <label>Image:</label>
-                    <input
-                      type="file"
-                      accept="image/*"
-                      onChange={(e) =>
-                        handleFileChange(
-                          index,
-                          "image",
-                          e.target.files?.[0] || null
-                        )
-                      }
-                    />
-                  </div>
+                  )}
                 </div>
               </div>
             ))}
@@ -462,7 +499,7 @@ const AddQuestionTabs = (props: AddQuestionTabsProps) => {
             onChange={(e) => setQuestionText(e.target.value)}
           />
           <TextField
-            label="Từ khóa"
+            label="Đáp án đúng"
             fullWidth
             margin="normal"
             value={keyword}
@@ -470,40 +507,66 @@ const AddQuestionTabs = (props: AddQuestionTabsProps) => {
           />
           <div className="mt-4">
             {writingAnswers.map((writingAnswer, index) => (
-              <div key={index} className="mb-4 flex">
-                <TextField
-                  label={`Đáp án ${index + 1}`}
-                  value={writingAnswer.answer}
-                  onChange={(e) =>
-                    handleWritingAnswerChange(index, e.target.value)
-                  }
-                  fullWidth
-                  margin="normal"
-                />
-                <Button
-                  variant="outlined"
-                  color="secondary"
-                  onClick={() => removeWritingAnswer(index)}
-                  className="ml-2"
-                >
-                  Xóa
-                </Button>
-                <FormControlLabel
-                  control={
-                    <Checkbox
-                      checked={writingAnswer.correct}
-                      onChange={() => handleWritingCorrectChange(index)}
-                    />
-                  }
-                  label="Đáp án đúng"
-                />
-                <input
-                  type="file"
-                  accept="audio/*"
-                  onChange={(e) =>
-                    handleWritingAudioChange(index, e.target.files?.[0] || null)
-                  }
-                />
+              <div key={index} className="mb-4">
+                <div className="flex justify-center items-center">
+                  <FormControlLabel
+                    control={
+                      <Checkbox
+                        checked={writingAnswer.correct}
+                        onChange={() => handleWritingCorrectChange(index)}
+                      />
+                    }
+                    label=""
+                  />
+                  <TextField
+                    label={`Đáp án ${index + 1}`}
+                    value={writingAnswer.answer}
+                    onChange={(e) =>
+                      handleWritingAnswerChange(index, e.target.value)
+                    }
+                    fullWidth
+                    margin="normal"
+                  />
+                  <div className="flex items-center ml-2">
+                    <Button
+                      variant="outlined"
+                      color="secondary"
+                      onClick={() => removeWritingAnswer(index)}
+                      className="ml-2"
+                    >
+                      Xóa
+                    </Button>
+                  </div>
+                </div>
+                <div className="flex justify-left items-center gap-4">
+                  <span>Audio: </span>
+                  <input
+                    type="file"
+                    accept="audio/*"
+                    onChange={(e) =>
+                      handleWritingAudioChange(
+                        index,
+                        e.target.files?.[0] || null
+                      )
+                    }
+                  />
+                  {/* Nghe trước âm thanh nếu đã tải lên */}
+
+                  {writingAnswer.audio && (
+                    <IconButton
+                      onClick={() => {
+                        const audioSrc = URL.createObjectURL(
+                          writingAnswer.audio as Blob
+                        );
+                        const audio = new Audio(audioSrc);
+                        audio.play();
+                      }}
+                      aria-label="play audio"
+                    >
+                      <VolumeUpIcon />
+                    </IconButton>
+                  )}
+                </div>
               </div>
             ))}
             <Button variant="contained" onClick={addWritingAnswer}>
@@ -512,15 +575,12 @@ const AddQuestionTabs = (props: AddQuestionTabsProps) => {
           </div>
         </div>
       )}
+      <div className="mt-6 text-right">
+        <Button variant="contained" color="primary" onClick={handleSubmit}>
+          Lưu câu hỏi
+        </Button>
+      </div>
 
-      <Button
-        variant="contained"
-        color="primary"
-        onClick={handleSubmit}
-        className="mt-4"
-      >
-        Lưu câu hỏi
-      </Button>
       <ToastNotification />
     </div>
   );

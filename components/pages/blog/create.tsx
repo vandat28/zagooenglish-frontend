@@ -14,21 +14,25 @@ import CardMedia from "@mui/material/CardMedia";
 import Typography from "@mui/material/Typography";
 import { API_BLOG } from "@/constants/api";
 import { redirect } from "next/navigation";
+import { useUser } from "@/context/user";
 interface Blog {
   title: string;
   htmlContent: string;
   description: string;
   avatar: File | undefined;
   avatarTesting: string;
+  username: string | undefined;
 }
 
 const TextEditor: React.FC = () => {
+  const { user } = useUser();
   const [blog, setBlog] = useState<Blog>({
     title: "",
     htmlContent: "",
     avatar: undefined,
     description: "",
     avatarTesting: "",
+    username: user?.username,
   });
 
   const [open, setOpen] = useState<boolean>(false);
@@ -101,6 +105,7 @@ const TextEditor: React.FC = () => {
         }, 3000);
       }
     } catch (error) {
+      console.log(error);
       notifyError("Lỗi không mong muốn vui lòng thử lại");
     }
   };

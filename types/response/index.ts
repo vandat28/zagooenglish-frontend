@@ -13,6 +13,7 @@ type Topic = {
     label: string;
     img: string;
     progress: number
+    active: number
 }
 
 type Question = {
@@ -48,4 +49,6 @@ type Blog = {
     description: string;
     content: string;
     img: string;
+    status: number;
+    username: string;
 }

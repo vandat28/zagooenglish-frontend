@@ -3,22 +3,33 @@ import PaginationControlled from "@/components/ui/pagination";
 import {
   Box,
   Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
   FormControl,
+  IconButton,
   InputLabel,
   MenuItem,
   Select,
   TextField,
+  Tooltip,
 } from "@mui/material";
 import Image from "next/image";
-import { useState } from "react";
+import React, { useState } from "react";
 import NativeSelect from "@mui/material/NativeSelect";
 import useSWR from "swr";
-import { API_USER_LIST } from "@/constants/api";
+import { API_USER_LIST, API_USER_ROLE } from "@/constants/api";
 import { fetcher } from "@/api/fetcher";
 import { User } from "@/types/User";
+import ToastNotification, {
+  notifySuccess,
+} from "@/components/ui/toast-notification";
+import axios from "axios";
 
 const TableTwo = () => {
-  const { data, error, isLoading } = useSWR<User[]>(
+  const { data, error, isLoading, mutate } = useSWR<User[]>(
     `${API_USER_LIST}`,
     fetcher
   );
@@ -40,7 +51,9 @@ const TableTwo = () => {
   const searchedItems = usersData?.filter((e) =>
     !searchCondition
       ? true
-      : e.username.toLowerCase().includes(searchCondition.toLowerCase().trim())
+      : e.username
+      ? e.username.toLowerCase().includes(searchCondition.toLowerCase().trim())
+      : ""
   );
 
   const filteredItems = searchedItems?.filter((e) =>
@@ -53,9 +66,37 @@ const TableTwo = () => {
 
   const currentItems = filteredItems?.slice(indexOfFirstItem, indexOfLastItem);
 
-  // const handleClose = () => {
-  //   setOpen(false);
-  // };
+  const [open, setOpen] = React.useState(false);
+  const [userId, setUserId] = React.useState("");
+
+  const handleClickOpen = (username: string) => {
+    setOpen(true);
+    setUserId(username);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  const updateRole = async () => {
+    try {
+      // Gọi API để cập nhật role cho người dùng
+      const response = await axios.put(`${API_USER_ROLE}/${userId}`, {
+        role: "Admin",
+      });
+
+      // Thông báo thành công hoặc xử lý kết quả sau khi cập nhật
+      console.log("Cập nhật quyền thành công:", response.data);
+
+      // Đóng dialog sau khi hoàn tất
+      handleClose();
+      notifySuccess("Cấp quyền thành công");
+      mutate();
+    } catch (error) {
+      console.error("Lỗi cập nhật quyền:", error);
+    }
+  };
+
   return (
     <>
       <div className="mb-4 flex gap-2">
@@ -134,25 +175,37 @@ const TableTwo = () => {
               <p className="text-sm text-black dark:text-white">{user.role}</p>
             </div>
             <div className="col-span-2 flex items-center">
-              <p className="text-sm text-black dark:text-white">
-                {user.fullname || "Guest"}
-              </p>
+              {user.fullname ? (
+                <p className="text-sm text-green-500 dark:text-white">
+                  {user.fullname}
+                </p>
+              ) : (
+                <p className="text-sm text-blue-300 dark:text-white">
+                  Chưa cập nhật
+                </p>
+              )}
             </div>
             <div className="col-span-1 flex items-center justify-center">
-              <button className="text-sm hover:text-meta-3 cursor-pointer">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 20 20"
-                  fill="currentColor"
-                  className="size-5"
-                >
-                  <path
-                    fillRule="evenodd"
-                    d="M10.339 2.237a.531.531 0 0 0-.678 0 11.947 11.947 0 0 1-7.078 2.75.5.5 0 0 0-.479.425A12.11 12.11 0 0 0 2 7c0 5.163 3.26 9.564 7.834 11.257a.48.48 0 0 0 .332 0C14.74 16.564 18 12.163 18 7c0-.538-.035-1.069-.104-1.589a.5.5 0 0 0-.48-.425 11.947 11.947 0 0 1-7.077-2.75ZM10 6a.75.75 0 0 1 .75.75v3.5a.75.75 0 0 1-1.5 0v-3.5A.75.75 0 0 1 10 6Zm0 9a1 1 0 1 0 0-2 1 1 0 0 0 0 2Z"
-                    clipRule="evenodd"
-                  />
-                </svg>
-              </button>
+              <IconButton
+                className="text-sm hover:text-meta-3 cursor-pointer"
+                disabled={user.role === "Admin"}
+                onClick={() => handleClickOpen(user.username)}
+              >
+                <Tooltip title="Cấp quyền admin" placement="top">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 20 20"
+                    fill="currentColor"
+                    className="size-5"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      d="M10.339 2.237a.531.531 0 0 0-.678 0 11.947 11.947 0 0 1-7.078 2.75.5.5 0 0 0-.479.425A12.11 12.11 0 0 0 2 7c0 5.163 3.26 9.564 7.834 11.257a.48.48 0 0 0 .332 0C14.74 16.564 18 12.163 18 7c0-.538-.035-1.069-.104-1.589a.5.5 0 0 0-.48-.425 11.947 11.947 0 0 1-7.077-2.75ZM10 6a.75.75 0 0 1 .75.75v3.5a.75.75 0 0 1-1.5 0v-3.5A.75.75 0 0 1 10 6Zm0 9a1 1 0 1 0 0-2 1 1 0 0 0 0 2Z"
+                      clipRule="evenodd"
+                    />
+                  </svg>
+                </Tooltip>
+              </IconButton>
             </div>
           </div>
         ))}
@@ -183,6 +236,28 @@ const TableTwo = () => {
           />
         </div>
       </div>
+      <ToastNotification />
+      <Dialog
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">
+          {`Bạn có muốn hoạt động chủ đề?`}
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            Bạn có muốn cấp quyền Admin cho {userId}
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose}>Không đồng ý</Button>
+          <Button onClick={updateRole} autoFocus>
+            Đồng ý
+          </Button>
+        </DialogActions>
+      </Dialog>
     </>
   );
 };
