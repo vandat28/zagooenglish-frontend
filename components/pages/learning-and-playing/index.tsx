@@ -13,10 +13,6 @@ export default function LearningAndPlaying() {
     fetcher
   );
 
-  // Determine loading state
-
-  console.log(data);
-
   const isLoading = !data && !error;
 
   if (error) return <div>Error</div>;

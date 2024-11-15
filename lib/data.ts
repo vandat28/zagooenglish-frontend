@@ -1,6 +1,6 @@
 import { API_TOPIC} from "@/constants/api";
 import axios from 'axios';
-
+import { API_DASHBOARD_UPDATE_VISITS } from "@/constants/api";
 
 export async function getTopicTitle(id: number){
     return axios
@@ -25,3 +25,6 @@ export async function getTopicTitle(id: number){
 }
 
 
+export async function updateVisits(){
+  return  axios.post(`${API_DASHBOARD_UPDATE_VISITS}`, {});
+}

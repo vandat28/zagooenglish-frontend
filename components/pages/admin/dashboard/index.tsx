@@ -1,13 +1,16 @@
 "use client";
 import dynamic from "next/dynamic";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import ChartOne from "@/components/ui/admin/Charts/ChartOne";
 import ChartTwo from "@/components/ui/admin/Charts/ChartTwo";
 import TableOne from "@/components/ui/admin/Tables/TableOne";
 import CardDataStats from "@/components/admin/CardDataStats";
 import useSWR from "swr";
 import { fetcher } from "@/api/fetcher";
-import { API_DASHBOARD_COUNT_RECORDS } from "@/constants/api";
+import {
+  API_DASHBOARD_COUNT_RECORDS,
+  API_DASHBOARD_GET_VISITS,
+} from "@/constants/api";
 
 const ChartThree = dynamic(
   () => import("@/components/ui/admin/Charts/ChartThree"),
@@ -17,18 +20,29 @@ const ChartThree = dynamic(
 );
 
 export default function Dashboard() {
+  const [visitCount, setVisitCount] = useState(0);
   const { data, error, isLoading, mutate } = useSWR<any>(
     `${API_DASHBOARD_COUNT_RECORDS}`,
     fetcher
   );
+  const currentMonth = new Date().toISOString().slice(0, 7);
+
+  useEffect(() => {
+    // Lấy số lượt truy cập của tháng hiện tại
+    fetch(`${API_DASHBOARD_GET_VISITS}/${currentMonth}`)
+      .then((res) => res.json())
+      .then((data) => setVisitCount(data.visit_count));
+  }, []);
   return (
     <>
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-6 xl:grid-cols-4 2xl:gap-7.5">
         <CardDataStats
-          title="Tổng lượt truy cập"
-          total="$3.456K"
-          rate="0.43%"
-          levelUp
+          title={`Tổng lượt học tháng ${currentMonth
+            .split("-")
+            .reverse()
+            .join(" năm ")}`}
+          total={visitCount.toString()}
+          rate=""
         >
           <svg
             className="fill-primary dark:fill-white"

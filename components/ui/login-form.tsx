@@ -53,7 +53,7 @@ export default function LoginForm() {
         const response = await axios.post(`${API_USER_LOGIN}`, formData);
         const user = response.data;
         Cookies.set("user", JSON.stringify(user), {
-          expires: 1, // 1 day
+          expires: 30, // 1 day
           secure: process.env.NODE_ENV === "production",
           sameSite: "strict",
         });

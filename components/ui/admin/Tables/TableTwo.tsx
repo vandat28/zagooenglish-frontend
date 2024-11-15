@@ -16,7 +16,6 @@ import {
   TextField,
   Tooltip,
 } from "@mui/material";
-import Image from "next/image";
 import React, { useState } from "react";
 import NativeSelect from "@mui/material/NativeSelect";
 import useSWR from "swr";

@@ -90,36 +90,41 @@ const TableOne = (props: TableOneProps) => {
 
   return (
     <>
-      <TextField
-        id="filled-search"
-        label="Tìm kiếm"
-        type="search"
-        variant="filled"
-        onChange={(e) => {
-          setCurrentPage(1);
-          setSearchCondition(e.target.value ?? undefined);
-        }}
-      />
-      <Box sx={{ minWidth: 150 }}>
-        <FormControl variant="filled" sx={{ minWidth: 150 }}>
-          <InputLabel id="demo-simple-select-filled-label">Cấp độ</InputLabel>
-          <Select
-            labelId="demo-simple-select-filled-label"
-            id="demo-simple-select-filled"
-            value={filter}
-            onChange={(e) => {
-              setCurrentPage(1);
-              setFilter(e.target.value);
-            }}
-          >
-            <MenuItem value={2}>
-              <em>None</em>
-            </MenuItem>
-            <MenuItem value={1}>Đã duyệt</MenuItem>
-            <MenuItem value={0}>Chưa duyệt</MenuItem>
-          </Select>
-        </FormControl>
-      </Box>
+      <div className="mb-4 flex gap-2">
+        <TextField
+          id="filled-search"
+          label="Tìm kiếm"
+          type="search"
+          variant="filled"
+          onChange={(e) => {
+            setCurrentPage(1);
+            setSearchCondition(e.target.value ?? undefined);
+          }}
+        />
+        <Box sx={{ minWidth: 150 }}>
+          <FormControl variant="filled" sx={{ minWidth: 150 }}>
+            <InputLabel id="demo-simple-select-filled-label">
+              Trạng thái
+            </InputLabel>
+            <Select
+              labelId="demo-simple-select-filled-label"
+              id="demo-simple-select-filled"
+              value={filter}
+              onChange={(e) => {
+                setCurrentPage(1);
+                setFilter(e.target.value);
+              }}
+            >
+              <MenuItem value={2}>
+                <em>None</em>
+              </MenuItem>
+              <MenuItem value={1}>Đã duyệt</MenuItem>
+              <MenuItem value={0}>Chưa duyệt</MenuItem>
+            </Select>
+          </FormControl>
+        </Box>
+      </div>
+
       <div className="rounded-sm border border-stroke bg-white px-5 pb-2.5 pt-6 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
         <h4 className="mb-6 text-xl font-semibold text-black dark:text-white">
           {props.user?.role == "User" ? "BLOG CỦA TÔI" : "BLOG"}

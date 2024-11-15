@@ -1,5 +1,6 @@
 "use client";
 import { CircularProgressWithLabel } from "@/components/ui/process-bar";
+import { UPLOAD_DOMAIN } from "@/constants/api";
 import { Dialog, DialogContent } from "@mui/material";
 import Link from "next/link";
 import { useState } from "react";
@@ -26,7 +27,7 @@ export default function Topic(props: TopicProps) {
         <div className="bg-white p-1 flex justify-center items-center rounded-full w-24 h-24">
           <CircularProgressWithLabel value={props.topic.progress} size={96}>
             <img
-              src={`http://localhost:8080/uploads/${props.topic.img}`}
+              src={`${UPLOAD_DOMAIN}/${props.topic.img}`}
               className="w-20 rounded-full" // Thêm h-20 để đảm bảo chiều cao bằng chiều rộng
             />
           </CircularProgressWithLabel>
@@ -40,7 +41,7 @@ export default function Topic(props: TopicProps) {
         <DialogContent>
           <div className="p-12 w-80 flex flex-col items-center">
             <img
-              src={`http://localhost:8080/uploads/${props.topic.img}`}
+              src={`${UPLOAD_DOMAIN}/${props.topic.img}`}
               className="w-14 md:w-20 rounded-full"
             />
             <div className="mt-8 text-center">

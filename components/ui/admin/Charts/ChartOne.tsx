@@ -1,8 +1,10 @@
 "use client";
 
 import { ApexOptions } from "apexcharts";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import dynamic from "next/dynamic";
+import axios from "axios";
+import { API_DASHBOARD_GET_VISITS_YEAR } from "@/constants/api";
 
 const ReactApexChart = dynamic(() => import("react-apexcharts"), {
   ssr: false,
@@ -117,7 +119,7 @@ const options: ApexOptions = {
       },
     },
     min: 0,
-    max: 10000,
+    max: 100,
   },
 };
 
@@ -129,10 +131,28 @@ interface ChartOneState {
 }
 
 const ChartOne: React.FC = () => {
+  const [data, setData] = useState([]);
+
+  useEffect(() => {
+    const fetchMonthlyVisits = async () => {
+      try {
+        const response = await axios.get(API_DASHBOARD_GET_VISITS_YEAR);
+        setData(Object.values(response.data)); // Cập nhật state với dữ liệu nhận được
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchMonthlyVisits(); // Gọi hàm
+  }, []);
+
+  console.log(data);
+
+  // Chạy một lần khi thành phần được gắn
   const series = [
     {
-      name: "Tổng truy cập",
-      data: [1000, 1100, 2200, 2700, 1300, 2200, 3700, 2100, 4400, 2200, 0, 0],
+      name: "Tổng lượt học",
+      data: data,
     },
 
     // {
@@ -151,7 +171,7 @@ const ChartOne: React.FC = () => {
             </span>
             <div className="w-full">
               <p className="font-semibold text-primary">
-                Biểu đồ lượt truy cập
+                Biểu đồ số lượng người học
               </p>
               <p className="text-sm font-medium">01.01.2024 - 31.12.2024</p>
             </div>
