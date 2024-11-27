@@ -151,7 +151,8 @@ const QuestionForm: React.FC<QuestionFormProps> = ({
         <form onSubmit={handleSubmit}>
           <DialogContent>
             {initialData?.typeName == "reading" ||
-            initialData?.typeName == "speaking" ? (
+            initialData?.typeName == "speaking" ||
+            initialData?.typeName == "writing" ? (
               <TextField
                 autoFocus
                 required

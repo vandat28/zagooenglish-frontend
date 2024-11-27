@@ -59,7 +59,7 @@ const WritingQuestion = (props: WritingQuestionProps) => {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center  \p-4">
+    <div className="flex flex-col items-center justify-center p-4">
       <h2 className="text-center text-2xl md:text-3xl mb-8 font-semibold">
         Dịch câu sau
       </h2>
@@ -67,13 +67,13 @@ const WritingQuestion = (props: WritingQuestionProps) => {
         {props.question.title}
       </p>
       <div
-        className={`bg-white p-4 rounded-lg shadow-lg mb-8 w-full h-48 space-x-4 border-4
-       ${text.length === trueAnswer.length && "border-green-400"}`}
+        className={`bg-white p-4 rounded-lg shadow-lg mb-8 w-full h-48 space-x-2 border-4
+         ${text.length === trueAnswer.length && "border-green-400"}`}
       >
         {text.map((item: string, index: number) => (
           <button
             key={index}
-            className="bg-white border-2 border-black p-2 rounded-md shadow-lg  font-medium wordAnimation"
+            className="bg-white border-2 border-slate-200 px-4 py-3 rounded-md shadow-lg font-semibold text-lg wordAnimation"
           >
             {item}
           </button>
@@ -83,28 +83,24 @@ const WritingQuestion = (props: WritingQuestionProps) => {
         {props.question.answers.map((item: Answer, index: number) => (
           <div key={index}>
             {isClicked.includes(index) ? (
-              <>
-                <button
-                  key={index}
-                  disabled={true}
-                  className="bg-gray-2 border-2 p-2 rounded-md shadow-lg"
-                >
-                  <span className="invisible">{item.answer}</span>
-                </button>
-              </>
+              <button
+                key={index}
+                disabled={true}
+                className="bg-slate-100 px-4 py-3 rounded-md shadow-lg text-lg"
+              >
+                <span className="invisible">{item.answer}</span>
+              </button>
             ) : (
-              <>
-                <button
-                  key={index}
-                  onClick={() =>
-                    handleClick(item.answer, item.isTrue, index, item.audioSrc)
-                  }
-                  className={`bg-white border-2 border-black p-2 rounded-md shadow-lg hover:bg-gray-3 hover:shadow-xl
-                  ${isFalse[index] ? "shake border-red" : ""}`}
-                >
-                  <span className="visible font-medium">{item.answer}</span>
-                </button>
-              </>
+              <button
+                key={index}
+                onClick={() =>
+                  handleClick(item.answer, item.isTrue, index, item.audioSrc)
+                }
+                className={`bg-white border-2 border-black px-4 py-3 rounded-md shadow-lg text-lg hover:bg-gray-300 hover:shadow-xl
+                ${isFalse[index] ? "shake border-red" : ""}`}
+              >
+                <span className="visible font-semibold">{item.answer}</span>
+              </button>
             )}
           </div>
         ))}
