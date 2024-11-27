@@ -392,7 +392,7 @@ const TableThree = () => {
           />
         </div>
       </div>
-      <ToastNotification />
+
       <Dialog
         open={openActive}
         onClose={handleCloseActive}
@@ -444,6 +444,7 @@ const TableThree = () => {
         topicData={topicUpdate}
       />
       <AddTopicDialog
+        data={data}
         open={open}
         handleClose={handleClose}
         onSubmitSuccess={refreshTopics}
@@ -453,6 +454,8 @@ const TableThree = () => {
         onClose={onClose}
         topicId={topicId}
       />
+
+      <ToastNotification />
     </>
   );
 };

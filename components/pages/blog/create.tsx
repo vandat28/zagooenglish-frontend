@@ -295,7 +295,7 @@ const TextEditor: React.FC = () => {
                 Xem Blog
               </Button>
               <Button variant="contained" onClick={addBlog}>
-                Submit
+                Tạo Blog
               </Button>
             </div>
           </div>

@@ -25,6 +25,8 @@ export default function LoginForm() {
 
     if (!formData.username) {
       newErrors.username = "Vui lòng nhập tài khoản";
+    } else if (formData.username.length < 6) {
+      newErrors.username = "Tài khoản phải có ít nhất 6 ký tự";
     }
 
     if (!formData.password) {

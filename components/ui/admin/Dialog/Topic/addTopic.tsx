@@ -14,6 +14,7 @@ import ToastNotification, {
 
 type AddTopicDialogProps = {
   open: boolean;
+  data: any[] | undefined;
   handleClose: () => void;
   onSubmitSuccess: () => void; // Callback để cập nhật dữ liệu sau khi submit
 };
@@ -33,10 +34,21 @@ export default function AddTopicDialog(props: AddTopicDialogProps) {
     }
   };
 
+  console.log(props.data);
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const formData = new FormData(event.currentTarget); // Tạo FormData để chứa dữ liệu
-    console.log(formData);
+    console.log(formData.get("name")?.toString().trim());
+    // Kiểm tra trùng lặp tên
+    const newTopicName = formData.get("name")?.toString().trim().toLowerCase();
+    const isDuplicate = props.data?.some(
+      (topic) => topic.name.toLowerCase() === newTopicName
+    );
+
+    if (isDuplicate) {
+      alert("Tên chủ đề đã tồn tại. Vui lòng chọn tên khác.");
+      return;
+    }
     try {
       // Gửi yêu cầu POST tới API bằng axios
       const response = await axios.post(`${API_TOPIC}`, formData, {

@@ -18,6 +18,7 @@ import { fetcher } from "@/api/fetcher";
 import useSWR from "swr";
 import { API_QUESTIONS_OF_TOPIC } from "@/constants/api";
 import AddQuestions from "@/components/ui/admin/Dialog/addQuestions";
+import ToastNotification from "@/components/ui/toast-notification";
 
 const Transition = React.forwardRef(function Transition(
   props: TransitionProps & {
@@ -87,7 +88,11 @@ export default function QuestionsManagementDialog(
           )}
 
           <div className="w-[48%] space-y-2">
-            <QuestionAccordion questions={data?.questions || []} />
+            <QuestionAccordion
+              topicId={data?.topic?.id}
+              questions={data?.questions || []}
+              resetData={resetData}
+            />
           </div>
         </Box>
       </Dialog>
