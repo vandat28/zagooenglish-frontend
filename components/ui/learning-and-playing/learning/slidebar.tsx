@@ -26,7 +26,7 @@ const Sidebar = (props: SidebarProps) => {
 
   return (
     <>
-      <div className="no-scrollbar overflow-auto w-24 duration-200 ease-in-out z-10 flex-col inset-y-0 border border-y-0 border-r-2 border-blue-100 shadow-xl bg-white  hidden xl:flex ">
+      <div className="h-screen no-scrollbar overflow-auto w-24 duration-200 ease-in-out z-10 flex-col inset-y-0 border border-y-0 border-r-2 border-blue-100 shadow-xl bg-white  hidden xl:flex ">
         <div className="flex space-y-1 flex-col justify-center items-center py-4">
           <Link href={`/`}>
             <Tooltip title="Trang chủ" placement="right" className="w-16 h-16">

@@ -252,10 +252,10 @@ const AddQuestionTabs = (props: AddQuestionTabsProps) => {
         );
         return;
       }
-      if (validWritingAnswers.some((answer) => !answer.audio)) {
-        alert("Phải nhập file âm thanh cho đáp án trong phần Writing.");
-        return;
-      }
+      // if (validWritingAnswers.some((answer) => !answer.audio)) {
+      //   alert("Phải nhập file âm thanh cho đáp án trong phần Writing.");
+      //   return;
+      // }
 
       validWritingAnswers.forEach((writingAnswer, index) => {
         formData.append(`answers[${index}][text]`, writingAnswer.answer);
@@ -580,8 +580,6 @@ const AddQuestionTabs = (props: AddQuestionTabsProps) => {
           Lưu câu hỏi
         </Button>
       </div>
-
-      <ToastNotification />
     </div>
   );
 };

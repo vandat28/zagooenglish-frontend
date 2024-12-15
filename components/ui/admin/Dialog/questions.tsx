@@ -89,6 +89,7 @@ export default function QuestionsManagementDialog(
 
           <div className="w-[48%] space-y-2">
             <QuestionAccordion
+              topicActive={data?.topic?.active}
               topicId={data?.topic?.id}
               questions={data?.questions || []}
               resetData={resetData}

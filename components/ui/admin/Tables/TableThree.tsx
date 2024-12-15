@@ -317,7 +317,6 @@ const TableThree = () => {
                       </IconButton>
                       <IconButton
                         className="hover:text-primary"
-                        disabled={topic.active === 1}
                         onClick={() => {
                           setOpenUpdate(true);
                           setTopicUpdate(topic);

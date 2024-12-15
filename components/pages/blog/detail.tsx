@@ -15,13 +15,14 @@ type BlogDetailProps = {
 export default function BlogDetail({ id }: BlogDetailProps) {
   const { data, error, isLoading } = useSWR<Blog>(`${API_BLOG}/${id}`, fetcher);
 
+  if (!data) return <CircleLoading />;
+
   if (data?.status !== 1) return <NotFound />;
 
   if (error) return <div>error</div>;
 
   return (
     <>
-      {isLoading && <CircleLoading />}
       {data && (
         <div className="flex flex-col xl:flex-row justify-between p-8 mx-auto max-w-screen-xl bg-white rounded-xl gap-y-6 xl:gap-x-[4%]">
           <article className="w-full xl:w-[68%] format format-sm sm:format-base lg:format-lg format-blue dark:format-invert">

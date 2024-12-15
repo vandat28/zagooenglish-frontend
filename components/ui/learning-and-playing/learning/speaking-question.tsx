@@ -12,6 +12,7 @@ const SpeechToTextPage = (props: SpeakingQuestionProps) => {
   const recognitionRef = useRef<SpeechRecognition | null>(null);
 
   useEffect(() => {
+    setTranscript("");
     const SpeechRecognition =
       window.SpeechRecognition || window.webkitSpeechRecognition;
     if (SpeechRecognition) {
@@ -60,12 +61,16 @@ const SpeechToTextPage = (props: SpeakingQuestionProps) => {
   return (
     <>
       <h2 className="text-center text-2xl md:text-3xl mb-8 font-semibold">
-        Phát âm: <span className="text-blue-600">{props.question.title}</span>
+        Hãy nói:{" "}
+        <span className="text-blue-600">
+          {props.question.keyword} - {props.question.title}
+        </span>
       </h2>
+
       <h2 className="text-center text-2xl md:text-3xl mb-8 font-semibold">
         {transcript && (
           <>
-            Your speech: <span className="text-blue-600">{transcript}</span>
+            Từ bạn nói: <span className="text-blue-600">{transcript}</span>
           </>
         )}
       </h2>
